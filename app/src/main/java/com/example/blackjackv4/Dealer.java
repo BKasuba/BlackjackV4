@@ -93,11 +93,14 @@ public class Dealer {
         houseTotal = houseTotal - Player.getBet();
         Player.setCash(Player.getCash() + Player.getBet());
         if(Dealer.isBust() == true) {
-            MainActivity.mainText.setText("The dealer has bust!");
+            MainActivity.mainText.setText("The dealer has bust!\nPress 'Place bet' to start next round");
+
         }else{
-            MainActivity.mainText.setText("Dealer had the weaker hand!");
+            MainActivity.mainText.setText("Dealer had the weaker hand! \nPress 'Place bet' to start next round");
+
         }
         MainActivity.softReset();
+
 
     }
 
@@ -140,6 +143,7 @@ public class Dealer {
 
     public static void setHouseTotal(int houseTotal) {
         Dealer.houseTotal = houseTotal;
+        MainActivity.updateHouseTotal();
     }
 
     public static String getCard() {

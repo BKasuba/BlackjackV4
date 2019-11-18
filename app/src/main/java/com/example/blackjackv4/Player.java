@@ -19,21 +19,25 @@ public class Player {
         Dealer.setHouseTotal(Dealer.getHouseTotal() + getBet());
         Player.setCash(Player.getCash() - Player.getBet());
         if(isBust() == true) {
-            MainActivity.mainText.setText("You've bust");
+            MainActivity.mainText.setText("You've bust\n Press 'Place bet' to start next round");
+
         }else {
-            MainActivity.mainText.setText("You had the weaker hand");
+            MainActivity.mainText.setText("You had the weaker hand\n Press 'Place bet' to start next round");
+
         }
         MainActivity.softReset();
     }
 
     public static void playerBet() {
         if (MainActivity.betInput.getText().toString().matches("^$")) {
-            MainActivity.playerHand.setText("Place bet first");
+            MainActivity.mainText.setText("Place bet first");
         } else if (MainActivity.betInput.getText().toString().matches("^[0-9]*")) {
             setBet(Integer.valueOf(MainActivity.betInput.getText().toString()));
-           //MainActivity.playerHand.setText("You placed a bet of " + getBet());
+           MainActivity.mainText.setText("You placed a bet of " + getBet());
+           MainActivity.betInput.getText().clear();
             setBetPlaced(true);
         }
+
 
     }
 
@@ -60,6 +64,7 @@ public class Player {
 
     public static void setCash(int cash) {
         Player.cash = cash;
+        MainActivity.updateCash();
     }
 
     public static int getBet() {

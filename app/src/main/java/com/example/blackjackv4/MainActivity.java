@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    static TextView deckStatus;
     static TextView houseTotal;
     static TextView playerCash;
     static TextView dealerHandValue;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Deck.initialiseDeck();
         Dealer.shuffle();
+        deckStatus = this.findViewById(R.id.deckStatus);
         houseTotal = this.findViewById(R.id.houseTotal);
         playerCash = this.findViewById(R.id.playerCash);
         dealerHandValue = this.findViewById(R.id.dealerHandValue);
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         dealerHandDisplay = this.findViewById(R.id.dealerHandDisplay);
         playerHandDisplay = this.findViewById(R.id.playerHandDIsplay);
         mainText = this.findViewById(R.id.mainText);
-        playerHand = this.findViewById(R.id.playerHandDIsplay);
+        //playerHand = this.findViewById(R.id.playerHandDIsplay);
         betInput = this.findViewById(R.id.betInput);
     }
 
@@ -46,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
             if (Player.isBetPlaced() == true) {
                 Dealer.dealToPlayer();
                 Dealer.dealToDealer();
-                updateDealer();
-                updatePlayer();
+                updateDisplays();
 
             }
         }else{
@@ -60,20 +61,23 @@ public class MainActivity extends AppCompatActivity {
 
         if(Player.isBust()== false) {
             Moves.hitToPlayer();
-            updatePlayer();
+            updateDisplays();
             bustCheck();
         }
 
 
 
+
     }
     public void onClickStand(View view){
-        MainActivity.mainText.setText("");
-        Player.setStand(true);
-        Dealer.dealerChoice();
-        updateDealer();
-        updatePlayer();
-        handCompare();
+        if(Player.isStand() == false) {
+            MainActivity.mainText.setText("");
+            Player.setStand(true);
+            Dealer.dealerChoice();
+            updateDisplays();
+            handCompare();
+        }
+
     }
     public void updatePlayer(){
         playerHandDisplay.setText(Player.getHand());
@@ -83,6 +87,22 @@ public class MainActivity extends AppCompatActivity {
     public void updateDealer(){
         dealerHandDisplay.setText(Dealer.getHand());
         dealerHandValue.setText(String.valueOf(Dealer.getHandValue()));
+        houseTotal.setText(String.valueOf(Dealer.getHouseTotal()));
+    }
+    public static void updateDisplays(){
+        dealerHandDisplay.setText(Dealer.getHand());
+        dealerHandValue.setText(String.valueOf(Dealer.getHandValue()));
+        deckStatus.setText(String.valueOf(Dealer.getCardsInDeck()));
+        houseTotal.setText(String.valueOf(Dealer.getHouseTotal()));
+
+        playerHandDisplay.setText(Player.getHand());
+        playerHandValue.setText(String.valueOf(Player.getHandValue()));
+
+    }
+    public static void updateCash(){
+        playerCash.setText(String.valueOf(Player.getCash()));
+    }
+    public static void updateHouseTotal(){
         houseTotal.setText(String.valueOf(Dealer.getHouseTotal()));
     }
     public void bustCheck(){
@@ -101,9 +121,13 @@ public class MainActivity extends AppCompatActivity {
 
         Player.setHand("");
         Player.setHandValue(0);
+        Player.setStand(false);
         Player.setBust(false);
         Player.setBetPlaced(false);
         Player.setBet(0);
+
+
+
 
 
     }
